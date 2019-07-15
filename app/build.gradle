@@ -19,7 +19,11 @@ android {
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "com.mlsdev.mlsdevstore.TestRunner"
+//        testInstrumentationRunner "com.mlsdev.mlsdevstore.TestRunner"
+        testApplicationId "com.mlsdev.mlsdevstore.test"
+        testInstrumentationRunner "com.mlsdev.mlsdevstore.test.utils.Instrumentation"
+        buildConfigField "String", "TAGS", "\"${getTagsProperty()}\""
+
     }
 
     signingConfigs {
@@ -75,6 +79,12 @@ android {
     androidExtensions {
         experimental = true
     }
+
+    sourceSets {
+        androidTest {
+            assets.srcDirs = ['src/androidTest/assets']
+        }
+    }
 }
 
 ext {
@@ -98,6 +108,11 @@ dependencies {
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0-alpha04'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha5'
+
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    androidTestImplementation 'com.android.support:support-annotations:28.0.0'
+    androidTestImplementation 'info.cukes:cucumber-android:1.2.5@jar'
+    androidTestImplementation 'info.cukes:cucumber-picocontainer:1.2.4'
 
     // Ktx
     implementation 'androidx.core:core-ktx:1.0.1'
@@ -195,4 +210,8 @@ dependencies {
     testImplementation "org.robolectric:robolectric:$robolectricVersion"
     testImplementation "android.arch.core:core-testing:1.1.1"
 
+}
+
+def getTagsProperty() {
+    return project.hasProperty("tags") ? project.getProperties().get("tags") : ""
 }
